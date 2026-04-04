@@ -1,7 +1,7 @@
 # Gestion-des-Emplois-Du-Temps
 Application Fullstack de gestion des emplois du temps. Backend REST API avec Spring Boot &amp; Spring Security (JWT) | Frontend réactif avec Angular &amp; Tailwind CSS.
 # 💫 About Me:
-Hi, I'm Souleymane Ndiogou SY, a Junior Full-Stack Developer & AI Enthusiast based in Saint-Louis, Senegal. Currently pursuing my Master’s in MIAGE at Université Gaston Berger.<br>I specialize in building scalable web applications and integrating Machine Learning solutions to solve real-world problems. From architecting backends with Spring Boot and Symfony to crafting responsive UIs with Angular and React, I love bridging the gap between complex data and user-friendly interfaces.
+Hi, I'm Souleymane Ndiogou SY, a Junior Full-Stack Developer & AI Enthusiast based in Saint-Louis, Senegal. Currently pursuing my Master’s in MIAGE at Gaston Berger University.<br>I specialize in building scalable web applications and integrating Machine Learning solutions to solve real-world problems. From architecting backends with Spring Boot and Symfony to crafting responsive UIs with Angular and React, I love bridging the gap between complex data and user-friendly interfaces.
 
 
 ## 🌐 Socials:
