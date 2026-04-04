@@ -1,0 +1,42 @@
+<div class="min-h-screen flex items-center justify-center bg-[hsl(220,12%,95%)] px-4 sm:px-6 lg:px-8">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="bg-white shadow-lg rounded-xl p-6 sm:p-8 w-full max-w-md border border-gray-200 mx-auto">
+        <div class="text-center mb-6">
+            <img (click)="navigateToHomePage()" src="/logo/logoP.png" alt="Logo de l'établissement" 
+                 class="mx-auto h-20 sm:h-24 mb-4 cursor-pointer transition-transform hover:scale-105">
+            <h2 class="text-xl sm:text-2xl font-semibold text-[#002233]">Administration</h2>
+        </div>
+  
+        <div class="mb-4">
+            <label for="email" class="block mb-2 text-[#002233] font-medium text-sm sm:text-base">Nom d'utilisateur</label>
+            <input id="email" type="text" formControlName="email" 
+                   class="w-full border border-gray-300 rounded-xl p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#297EA6] focus:border-transparent transition-colors duration-200" />
+            <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" 
+                 class="text-red-500 text-xs sm:text-sm mt-1">
+                Champ obligatoire
+            </div>              
+        </div>
+      
+        <div class="mb-6 relative">
+            <label for="password" class="block mb-2 text-[#002233] font-medium text-sm sm:text-base">Mot de passe</label>
+            <input id="password" [type]="hidePassword ? 'password' : 'text'" formControlName="password" 
+                   class="w-full border border-gray-300 rounded-xl p-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#297EA6] focus:border-transparent transition-colors duration-200" />
+            
+            <button type="button" (click)="hidePassword = !hidePassword" 
+                    class="absolute inset-y-0 right-0 pr-3 flex items-center pt-8 text-gray-500 hover:text-[#002233] focus:outline-none transition-colors duration-200">
+                <fa-icon [icon]="hidePassword ? faEye : faEyeSlash" class="text-base"></fa-icon>
+            </button>
+        
+            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" 
+                 class="text-red-500 text-xs sm:text-sm mt-1">
+                Champ obligatoire
+            </div>
+        </div>
+      
+        <div *ngIf="error" class="mb-4 text-red-500 text-xs sm:text-sm text-center">{{ error }}</div>
+      
+        <button type="submit"
+                class="w-full bg-[#297EA6] hover:bg-[#176082] text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed text-sm sm:text-base transform hover:scale-[1.02] active:scale-[0.98]">
+            Connexion
+        </button>
+    </form>
+</div>

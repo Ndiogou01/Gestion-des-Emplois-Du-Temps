@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+  
+:host {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Animation pour le titre */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.text-lg {
+  animation: fadeIn 1s ease-out;
+}

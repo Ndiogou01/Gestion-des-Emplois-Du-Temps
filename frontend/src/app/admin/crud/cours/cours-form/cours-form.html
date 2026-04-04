@@ -1,0 +1,66 @@
+<form (ngSubmit)="onSubmit()" class="space-y-4 sm:space-y-6">
+  <!-- Nom du cours -->
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-2">
+      Nom du cours
+    </label>
+    <input 
+      [(ngModel)]="formCours.nomCours" 
+      name="nom_cours" 
+      required 
+      class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#002233] focus:border-transparent placeholder-gray-400"
+      placeholder="Entrez le nom du cours" />
+  </div>
+
+  <!-- Type de cours -->
+  <div class="grid grid-cols-1 gap-4">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">
+        Type
+      </label>
+      <select 
+        [(ngModel)]="formCours.typeDeCours" 
+        name="type_de_cours" 
+        required 
+        class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#002233] focus:border-transparent">
+        <option value="CM">CM</option>
+        <option value="TD">TD</option>
+        <option value="TP">TP</option>
+        <option value="Devoir">Devoir</option>
+        <option value="Examen">Examen</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Enseignant responsable -->
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-2">
+      Enseignant responsable
+    </label>
+    <select 
+        [(ngModel)]="formCours.enseignantResponsableId" 
+        name="enseignant_responsable_id" 
+        required
+        class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#002233] focus:border-transparent">
+        <option [value]="null" disabled>Sélectionnez un enseignant</option>
+        <option *ngFor="let enseignant of enseignants" [value]="enseignant.id">
+        {{ enseignant.nomEnseignant }} {{ enseignant.prenomEnseignant }}
+        </option>
+    </select>
+  </div>
+
+  <!-- Actions -->
+  <div class="flex flex-col-reverse xs:flex-row xs:justify-end gap-3 pt-4 border-t border-gray-100">
+    <button
+      type="button"
+      (click)="cancel.emit()"
+      class="px-4 py-2.5 xs:py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors w-full xs:w-auto order-1">
+      Annuler
+    </button>
+    <button
+      type="submit"
+      class="px-4 py-2.5 xs:py-2 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-colors w-full xs:w-auto order-2">
+      {{ cours?.id ? 'Mettre à jour' : 'Créer' }}
+    </button>
+  </div>
+</form>

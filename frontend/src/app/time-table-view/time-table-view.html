@@ -1,0 +1,258 @@
+<div class="space-y-6">
+
+  <!-- En-tête responsive -->
+  <div *ngIf="selectedPlanningId" class="flex flex-col lg:flex-row lg:items-center lg:justify-between p-4 bg-[hsl(210,25%,98%)] rounded-lg border border-gray-200 mt-2 space-y-4 lg:space-y-0">
+    <h1 class="text-lg lg:text-xl font-medium text-gray-700 text-center lg:text-left">
+      Planning semaine du {{ formattedDateRange }}
+    </h1>
+    
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 lg:gap-4">
+      <div class="flex items-center gap-2">
+        <span class="text-sm font-medium text-gray-600">Filière:</span>
+        <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded-lg text-xs font-medium">
+          {{ getSelectedFiliereName() || 'Aucune' }}
+        </span>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <span class="text-sm font-medium text-gray-600">Semestre:</span>
+        <span class="bg-green-50 text-green-700 px-2 py-1 rounded-lg text-xs font-medium">
+          {{ selectedSemestre || 'Aucun' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtres responsive -->
+  <div *ngIf="selectedPlanningId" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
+    <div class="relative lg:col-span-1">
+      <input
+        type="text"
+        placeholder="Matière"
+        [(ngModel)]="filterCours"
+        class="w-full px-4 py-2 text-sm border bg-[hsl(210,25%,98%)] border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002233] focus:border-transparent transition-colors"
+      />
+      <svg class="w-4 h-4 absolute right-3 top-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </div>
+    
+    <div class="relative lg:col-span-1">
+      <input
+        type="text"
+        placeholder="Enseignant"
+        [(ngModel)]="filterEnseignant"
+        class="w-full px-4 py-2 text-sm border bg-[hsl(210,25%,98%)] border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002233] focus:border-transparent transition-colors"
+      />
+      <svg class="w-4 h-4 absolute right-3 top-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      </svg>
+    </div>
+    
+    <div class="relative lg:col-span-1">
+      <input
+        type="text"
+        placeholder="Salle"
+        [(ngModel)]="filterSalle"
+        class="w-full px-4 py-2 text-sm border bg-[hsl(210,25%,98%)] border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002233] focus:border-transparent transition-colors"
+      />
+      <svg class="w-4 h-4 absolute right-3 top-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+      </svg>
+    </div>
+    
+    <div class="relative lg:col-span-1">
+      <select
+        [(ngModel)]="filterJour"
+        class="text-gray-500 appearance-none w-full px-4 py-2 text-sm border border-gray-300 rounded-lg bg-[hsl(210,25%,98%)] focus:outline-none focus:ring-2 focus:ring-[#002233] focus:border-transparent transition-colors cursor-pointer"
+      >
+        <option value="">Jour</option>
+        <option *ngFor="let j of jours" [value]="j.toLowerCase()">{{ j }}</option>
+      </select>
+      <svg class="w-4 h-4 absolute right-3 top-3 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </div>
+
+    <button
+      (click)="resetFilters()"
+      class="px-4 py-2 bg-[hsl(210,25%,98%)] text-gray-700 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 lg:col-span-1"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+      <span class="hidden sm:inline">Réinitialiser</span>
+    </button>
+  </div>
+
+  <!-- Message aucun planning -->
+  <div *ngIf="!selectedPlanningId" class="bg-blue-50 border-l-4 border-[#002233] p-4 rounded-lg">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-gray-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-gray-700">
+          Aucun emploi du temps n'est encore disponible pour cette filière. 
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div *ngIf="selectedPlanningId" class="flex flex-wrap items-center justify-center gap-3 mb-4 p-3 bg-[hsl(210,25%,98%)] rounded-lg border border-gray-200">
+    <div class="text-sm font-medium text-gray-700 mr-2">Légende :</div>
+    
+    <div class="flex items-center gap-1" *ngFor="let item of legendItems">
+      <div class="w-3 h-3 border rounded-sm" [ngClass]="item.class"></div>
+      <span class="text-xs text-gray-600">{{ item.label }}</span>
+    </div>
+  </div> -->
+
+  <!-- Version desktop (cachée sur mobile) -->
+  <div *ngIf="selectedPlanningId" class="space-y-4">
+    <!-- Version desktop (cachée sur mobile) -->
+    <div class="hidden lg:block bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+      <div class="overflow-auto">
+        <table class="w-full border-collapse table-fixed">
+          <thead class="bg-gray-50 sticky top-0 z-10">
+            <tr>
+              <th class="bg-[#002233] py-4 px-8 text-sm font-semibold text-white text-center w-24 border-r border-[#00334d]">
+                Heure / Jour
+              </th>
+              <th *ngFor="let jour of jours" 
+                  class="bg-[#002233] py-4 px-4 text-sm font-semibold text-white text-center w-32 border-r border-[#00334d] last:border-r-0">
+                {{ jour }}
+              </th>
+            </tr>
+          </thead>
+  
+          <tbody class="divide-y divide-gray-200 bg-white">
+            <tr *ngFor="let heure of heures">
+              <td class="py-3 px-4 text-sm font-medium text-gray-700 text-center bg-gray-50 border-r border-gray-200"
+                  [ngClass]="{
+                    'bg-gray-100': heure === '13:00 - 14:00' || heure === '14:00 - 15:00'
+                  }">
+                {{ heure }}
+              </td>
+  
+              <td *ngFor="let jour of jours"
+                  [ngClass]="{
+                    'bg-gray-100 text-gray-400 italic pointer-events-none': heure === '13:00 - 14:00' || heure === '14:00 - 15:00'
+                  }"
+                  class="relative h-20 border-r border-gray-200 last:border-r-0">
+                
+                <ng-container *ngFor="let creneau of creneauxFiltres">
+                  <div *ngIf="shouldDisplayStart(creneau, heure.split('-')[0].trim(), jour)"
+                       class="absolute left-1 right-1 px-3 py-2 rounded-lg shadow border text-xs font-medium flex flex-col z-10"
+                       [style.top]="'0'"
+                       [style.height.px]="getHeightForCreneau(creneau)"
+                       [ngClass]="{
+                        'bg-blue-100 border-blue-300 text-[#002233]': getTypeCours(creneau.coursId) === 'CM',
+                        'bg-amber-100 border-amber-300 text-amber-800': getTypeCours(creneau.coursId) === 'TD',
+                        'bg-teal-100 border-teal-300 text-teal-800': getTypeCours(creneau.coursId) === 'TP',
+                        'bg-purple-100 border-purple-300 text-purple-800': getTypeCours(creneau.coursId) === 'Examen',
+                        'bg-rose-100 border-rose-300 text-rose-800': getTypeCours(creneau.coursId) === 'Devoir'
+                       }">
+                    <div class="font-semibold text-gray-900 break-words mb-1">
+                      {{ getCoursNom(creneau.coursId) }}
+                    </div>
+                    <div class="text-gray-600 break-words italic text-xs mb-1">
+                      {{ getEnseignantNom(creneau.enseignantId) }}
+                    </div>
+                    <div class="text-gray-500 text-xs break-words flex items-center justify-between">
+                      <span>{{ getSalleNom(creneau.salleId) }}</span>
+                      <span class="font-medium px-2 py-0.5 rounded text-xs break-words"
+                            [ngClass]="{
+                              'bg-blue-200 text-blue-700': getTypeCours(creneau.coursId) === 'CM',
+                              'bg-amber-200 text-amber-700': getTypeCours(creneau.coursId) === 'TD',
+                              'bg-teal-200 text-teal-700': getTypeCours(creneau.coursId) === 'TP',
+                              'bg-purple-200 text-purple-700': getTypeCours(creneau.coursId) === 'Examen',
+                              'bg-rose-200 text-rose-700': getTypeCours(creneau.coursId) === 'Devoir'
+                            }">
+                        {{ getTypeCours(creneau.coursId) }}
+                      </span>
+                    </div>
+                  </div>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <!-- Version mobile (cachée sur desktop) -->
+    <div class="lg:hidden space-y-4">
+      <div *ngFor="let jour of jours" class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+        <h3 class="font-semibold bg-[#002233] text-center py-2 sm:py-3 text-white text-base sm:text-lg">{{ jour }}</h3>
+        <div class="p-4 space-y-3">
+          <div *ngFor="let heure of heures" 
+               class="border-l-4 pl-3 py-3 rounded-r"
+               [ngClass]="{
+                 'border-blue-400 bg-blue-50': getTypeForHour(jour, heure) === 'CM',
+                 'border-amber-400 bg-amber-50': getTypeForHour(jour, heure) === 'TD',
+                 'border-teal-400 bg-teal-50': getTypeForHour(jour, heure) === 'TP',
+                 'border-purple-400 bg-purple-50': getTypeForHour(jour, heure) === 'Examen',
+                 'border-rose-400 bg-rose-50': getTypeForHour(jour, heure) === 'Devoir',
+                 'border-gray-300 bg-gray-100': getTypeForHour(jour, heure) === 'pause'
+               }">
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-sm font-medium text-gray-700">{{ heure }}</span>
+              <span *ngIf="heure === '13:00 - 14:00' || heure === '14:00 - 15:00'" 
+                    class="text-xs text-gray-500 italic bg-white px-2 py-1 rounded">Pause déjeuner</span>
+            </div>
+            
+            <div *ngIf="getCoursForHour(jour, heure) as cours" class="space-y-2">
+              <div class="font-semibold text-sm text-gray-900 leading-tight">{{ cours.nom }}</div>
+              <div class="text-xs text-gray-600 flex items-center gap-1">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                {{ cours.enseignant }}
+              </div>
+              <div class="text-xs text-gray-500 flex items-center gap-1">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                {{ cours.salle }}
+              </div>
+              <div class="text-xs font-medium px-2 py-1 rounded self-start mt-2"
+                   [ngClass]="{
+                     'bg-blue-200 text-blue-700': cours.type === 'CM',
+                     'bg-amber-200 text-amber-700': cours.type === 'TD',
+                     'bg-teal-200 text-teal-700': cours.type === 'TP',
+                     'bg-purple-200 text-purple-700': cours.type === 'Examen',
+                     'bg-rose-200 text-rose-700': cours.type === 'Devoir'
+                   }">
+                {{ cours.type }}
+              </div>
+            </div>
+            
+            <div *ngIf="!getCoursForHour(jour, heure) && heure !== '13:00 - 14:00' && heure !== '14:00 - 15:00'" 
+                  class="text-center py-4">
+              <div class="text-gray-400 italic text-sm">Aucun cours</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="selectedPlanningId" class="flex justify-center lg:justify-end mt-4 px-4 lg:px-0">
+    <button
+      class="w-full lg:w-auto bg-[#002233] hover:bg-[#00496e] text-white font-medium py-3 lg:py-2 px-6 rounded-lg lg:rounded-full transition flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+      type="button"
+      id="exportButton"
+      (click)="onExport()"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      <span class="text-sm lg:text-base">Télécharger l'emploi du temps</span>
+    </button>
+  </div>
+</div>

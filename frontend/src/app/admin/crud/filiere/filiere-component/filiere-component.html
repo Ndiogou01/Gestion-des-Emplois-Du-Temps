@@ -1,0 +1,157 @@
+<div class="min-h-screen bg-gray-50 py-4 sm:py-8">
+  <div class="max-w-6xl mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-sm border border-gray-200">
+
+    <!-- En-tête -->
+    <div class="mb-6 sm:mb-8">
+      <h1 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-2">Gestion des filières</h1>
+      <div class="flex justify-between items-center">
+        <p class="text-gray-600 text-sm">{{ filieres.length }} filière(s)</p>
+        <button 
+          (click)="openForm()" 
+          class="bg-[#002233] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#00649a] transition-colors flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Ajouter une filière
+        </button>
+      </div>
+    </div>
+
+    <!-- Filtres et recherche -->
+    <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <input 
+        type="text" 
+        placeholder="Rechercher..." 
+        class="bg-gray-50 w-full sm:max-w-md px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#002233] focus:border-transparent">
+      
+      <div class="flex items-center justify-between sm:justify-start gap-2 text-sm text-gray-600">
+        <span class="whitespace-nowrap">Afficher :</span>
+        <select 
+          (change)="onItemsPerPageChange($event)"
+          class="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#002233]">
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="all">Tout</option>
+        </select>
+        <span class="whitespace-nowrap hidden xs:inline">par page</span>
+      </div>
+    </div>
+
+    <!-- Tableau -->
+    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[400px]">
+          <thead class="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th class="text-left py-3 px-3 sm:px-4 font-semibold text-gray-700 text-sm">Nom de la filière</th>
+              <th class="text-right py-3 px-3 sm:px-4 font-semibold text-gray-700 text-sm">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr *ngFor="let s of getPaginatedFilieres()" class="hover:bg-gray-50 transition-colors">
+              <td class="py-3 px-3 sm:px-4">
+                <div class="font-light text-gray-900 text-sm sm:text-base">{{ s.nomFiliere }}</div>
+              </td>
+              <td class="py-3 px-3 sm:px-4 text-right">
+                <div class="flex items-center justify-end gap-2 sm:gap-3">
+                  <button 
+                    (click)="openForm(s)" 
+                    class="text-blue-600 hover:text-blue-800 transition-colors p-1 sm:p-1.5"
+                    title="Modifier">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                  </button>
+                  <button 
+                    (click)="deleteFiliere(s.id!)" 
+                    class="text-red-600 hover:text-red-800 transition-colors p-1 sm:p-1.5"
+                    title="Supprimer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- État vide -->
+      <div *ngIf="filieres.length === 0" class="text-center py-8 sm:py-12 bg-white">
+        <div class="text-gray-300 mb-2">
+          <svg class="w-10 h-10 sm:w-12 sm:h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+          </svg>
+        </div>
+        <p class="text-gray-500 text-sm">Aucune filière trouvée</p>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="filieres.length > 0 && getTotalPages() > 1" class="mt-4 sm:mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div class="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
+        Affichage de {{ getStartIndex() + 1 }} à {{ getEndIndex() }} sur {{ filieres.length }} résultats
+      </div>
+
+      <div class="flex items-center justify-center gap-1 sm:gap-2">
+        <button 
+          (click)="goToPage(1)" 
+          [disabled]="currentPage === 1"
+          class="px-2 sm:px-3 py-2 text-xs sm:text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          «
+        </button>
+
+        <button 
+          (click)="goToPage(currentPage - 1)" 
+          [disabled]="currentPage === 1"
+          class="px-2 sm:px-3 py-2 text-xs sm:text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          ‹
+        </button>
+
+        <div class="flex items-center gap-1">
+          <button 
+            *ngFor="let page of getVisiblePages()" 
+            (click)="goToPage(page)"
+            [class]="page === currentPage ? 'bg-[#002233] text-white border-[#002233]' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'"
+            class="px-2 sm:px-3 py-2 text-xs sm:text-sm border rounded transition-colors min-w-[32px] sm:min-w-[40px]">
+            {{ page }}
+          </button>
+        </div>
+
+        <button 
+          (click)="goToPage(currentPage + 1)" 
+          [disabled]="currentPage === getTotalPages()"
+          class="px-2 sm:px-3 py-2 text-xs sm:text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          ›
+        </button>
+
+        <button 
+          (click)="goToPage(getTotalPages())" 
+          [disabled]="currentPage === getTotalPages()"
+          class="px-2 sm:px-3 py-2 text-xs sm:text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          »
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div *ngIf="formVisible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-3 sm:p-4 z-50">
+      <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto mx-2 sm:mx-4">
+        <div class="p-4 sm:p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">
+            {{ selectedFiliere ? 'Modifier' : 'Ajouter' }} une filière
+          </h2>
+          
+          <app-filiere-form
+            [filiere]="selectedFiliere"
+            (save)="onSave($event)"
+            (cancel)="closeForm()">
+          </app-filiere-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

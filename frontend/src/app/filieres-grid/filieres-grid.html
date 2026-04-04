@@ -1,0 +1,55 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-20">
+
+  <div class="text-center mb-6 md:mb-8">
+    <p class="text-lg sm:text-xl text-[#00324a] font-medium px-2 sm:px-0">
+      Sélectionnez votre filière ci-dessous pour consulter votre emploi du temps
+    </p>
+  </div>
+  
+  <div class="relative w-full mb-4 sm:mb-6">
+    <svg
+      class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-500 pointer-events-none"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1111.5 4a7.5 7.5 0 515.15 12.65z"
+      />
+    </svg>
+    <input
+      type="text"
+      placeholder="Rechercher une filière..."
+      [(ngModel)]="searchText"
+      class="font-light w-full pl-9 sm:pl-10 pr-3 py-2.5 sm:py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#002233] bg-[hsl(220,12%,95%)] text-sm sm:text-base"
+    />
+  </div>
+  
+  <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+    <div
+      *ngFor="let filiere of filieresFiltered()"
+      class="bg-[#003b56] rounded-lg shadow-lg p-4 sm:p-6 cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300 text-white relative flex flex-col min-h-[120px] sm:min-h-[140px]"
+    >
+      <h2 class="text-base sm:text-lg md:text-xl font-light mb-8 sm:mb-14 line-clamp-2">{{ filiere.nomFiliere }}</h2>
+      
+      <button
+        class="font-light absolute bottom-3 sm:bottom-4 right-3 sm:right-4 bg-white text-[#00324a] hover:bg-gray-100 py-1.5 px-3 sm:py-2 sm:px-4 rounded-full transition-colors text-sm sm:text-base whitespace-nowrap"
+        (click)="onConsulter(filiere)"
+      >
+        Consulter
+      </button>
+    </div>
+  </div>
+
+  <div 
+    *ngIf="filieresFiltered().length === 0" 
+    class="text-center py-8 sm:py-12 text-gray-500"
+  >
+    <p class="text-base sm:text-lg">Aucune filière trouvée pour votre recherche.</p>
+  </div>
+</div>
